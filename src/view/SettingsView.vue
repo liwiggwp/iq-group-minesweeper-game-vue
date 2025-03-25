@@ -1,21 +1,37 @@
 <template>
   <div>
-    <h1>Настройки</h1>
-    <button @click="$router.push('/leaderboard')">Таблица лидеров</button>
+    <div class="container">
+      <h1>Настройки</h1>
+      <CustomButton
+        @click="$router.push('/leaderboard')" width="200px"
+        >Таблица лидеров</CustomButton
+      >
 
-    <div class="settings-container">
-      <h1>Выбор уровня сложности</h1>
-      <div class="difficulty">
-        <button @click="startGame('easy')">Простой (8x8, 10 мин)</button>
-        <button @click="startGame('medium')">Средний (16x16, 40 мин)</button>
-        <button @click="startGame('hard')">Сложный (32x16, 100 мин)</button>
+      <div class="settings-container">
+        <h1>Выбор уровня сложности</h1>
+        <div class="difficulty">
+          <CustomButton @click="startGame('easy')" width="100%"
+            >Простой (8x8, 10 мин)</CustomButton
+          >
+          <CustomButton @click="startGame('medium')" width="100%"
+            >Средний (16x16, 40 мин)</CustomButton
+          >
+          <CustomButton @click="startGame('hard')" width="100%"
+            >Сложный (32x16, 100 мин)</CustomButton
+          >
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import CustomButton from "@/components/ui/CustomButton.vue";
+
 export default {
+  components: {
+    CustomButton,
+  },
   methods: {
     startGame(difficulty) {
       this.$router.push({ path: "/game", query: { difficulty } });
@@ -25,6 +41,14 @@ export default {
 </script>
 
 <style>
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100vh;
+  position: relative;
+}
+
 .settings-container {
   display: flex;
   flex-direction: column;
@@ -39,14 +63,5 @@ export default {
   align-items: center;
   justify-content: center;
   gap: 10px;
-  margin-top: 20px;
-}
-
-.difficulty button {
-  width: 100%;
-  margin: 5px;
-  padding: 10px 20px;
-  font-size: 16px;
-  cursor: pointer;
 }
 </style>
