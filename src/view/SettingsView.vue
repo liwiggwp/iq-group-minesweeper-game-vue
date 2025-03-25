@@ -1,12 +1,6 @@
 <template>
   <div>
-    <div class="container">
-      <h1>Настройки</h1>
-      <CustomButton
-        @click="$router.push('/leaderboard')" width="200px"
-        >Таблица лидеров</CustomButton
-      >
-
+    <div>
       <div class="settings-container">
         <h1>Выбор уровня сложности</h1>
         <div class="difficulty">
@@ -41,14 +35,6 @@ export default {
 </script>
 
 <style>
-.container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  min-height: 100vh;
-  position: relative;
-}
-
 .settings-container {
   display: flex;
   flex-direction: column;
