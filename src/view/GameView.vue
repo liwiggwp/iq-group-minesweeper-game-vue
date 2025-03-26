@@ -8,6 +8,7 @@
       >Перезапустить игру</CustomButton
     >
     <p>Осталось мин: {{ counterMines }}</p>
+    <p v-if="message" style="color: red">{{ message }}</p>
 
     <div class="board">
       <div v-for="(row, rowIndex) in board" :key="rowIndex" class="row">
@@ -48,6 +49,8 @@ export default {
     return {
       board: [],
       counterMines: 0,
+      isGameover: false,
+      message: "",
       difficultySettings: {
         easy: { rows: 8, cols: 8, mines: 10 },
         medium: { rows: 16, cols: 16, mines: 40 },
@@ -60,6 +63,8 @@ export default {
       const difficulty = this.$route.query.difficulty || "easy";
       const { rows, cols, mines } = this.difficultySettings[difficulty];
       this.counterMines = mines;
+      this.isGameover = false;
+      this.message = "";
       this.board = Array.from({ length: rows }, () =>
         Array.from({ length: cols }, () => ({
           isMine: false,
@@ -82,11 +87,20 @@ export default {
       }
     },
     openCell(row, col) {
+      if (this.isGameover) return;
       const cell = this.board[row][col];
       if (cell.isOpen || cell.isFlag) return;
       cell.isOpen = true;
+
+      if (cell.isMine) {
+        this.message = "Вы проиграли!";
+        this.isGameover = true;
+        return;
+      }
     },
     flagCell(row, col) {
+      if (this.isGameOver) return;
+
       const cell = this.board[row][col];
       if (cell.isOpen) return;
       cell.isFlag = !cell.isFlag;
