@@ -20,8 +20,10 @@
           @contextmenu.prevent="flagCell(rowIndex, colIndex)"
           :style="{
             backgroundColor: cell.isOpen ? '#444' : '#ccc',
+            color: colors[cell.countMines],
           }"
         >
+          {{ cell.isOpen && cell.countMines > 0 ? cell.countMines : "" }}
           <img
             v-if="cell.isMine && cell.isOpen"
             src="@/assets/mine.png"
@@ -40,7 +42,7 @@
 
 <script>
 import CustomButton from "@/components/ui/CustomButton.vue";
-
+import colors from "@/utils/numberColors";
 export default {
   components: {
     CustomButton,
@@ -51,6 +53,7 @@ export default {
       counterMines: 0,
       isGameover: false,
       message: "",
+      colors,
       difficultySettings: {
         easy: { rows: 8, cols: 8, mines: 10 },
         medium: { rows: 16, cols: 16, mines: 40 },
@@ -73,6 +76,7 @@ export default {
         }))
       );
       this.initMines(rows, cols, mines);
+      this.countNeighbourMines();
     },
     initMines(rows, cols, mines) {
       let minesPlaced = 0;
@@ -97,6 +101,10 @@ export default {
         this.isGameover = true;
         return;
       }
+
+      if (cell.countMines === 0) {
+        this.openNeighbourCells(row, col);
+      }
     },
     flagCell(row, col) {
       if (this.isGameOver) return;
@@ -109,6 +117,45 @@ export default {
         this.counterMines--;
       } else {
         this.counterMines++;
+      }
+    },
+    isCellBoard(row, col) {
+      return (
+        row >= 0 &&
+        col >= 0 &&
+        row < this.board.length &&
+        col < this.board[0].length
+      );
+    },
+    countNeighbourMines() {
+      for (let row = 0; row < this.board.length; row++) {
+        for (let col = 0; col < this.board[row].length; col++) {
+          if (this.board[row][col].isMine) continue;
+
+          let countMines = 0;
+
+          for (let i = row - 1; i <= row + 1; i++) {
+            for (let j = col - 1; j <= col + 1; j++) {
+              if (this.isCellBoard(i, j) && this.board[i][j].isMine) {
+                countMines++;
+              }
+            }
+          }
+
+          this.board[row][col].countMines = countMines;
+        }
+      }
+    },
+    openNeighbourCells(row, col) {
+      for (let i = row - 1; i <= row + 1; i++) {
+        for (let j = col - 1; j <= col + 1; j++) {
+          if (this.isCellBoard(i, j) && (i !== row || j !== col)) {
+            const neighbour = this.board[i][j];
+            if (!neighbour.isOpen && !neighbour.isMine) {
+              this.openCell(i, j);
+            }
+          }
+        }
       }
     },
     restartGame() {
