@@ -7,6 +7,8 @@
     <CustomButton @click="restartGame()" width="100"
       >Перезапустить игру</CustomButton
     >
+    <p>Осталось мин: {{ counterMines }}</p>
+
     <div class="board">
       <div v-for="(row, rowIndex) in board" :key="rowIndex" class="row">
         <div
@@ -45,6 +47,7 @@ export default {
   data() {
     return {
       board: [],
+      counterMines: 0,
       difficultySettings: {
         easy: { rows: 8, cols: 8, mines: 10 },
         medium: { rows: 16, cols: 16, mines: 40 },
@@ -56,6 +59,7 @@ export default {
     initBoard() {
       const difficulty = this.$route.query.difficulty || "easy";
       const { rows, cols, mines } = this.difficultySettings[difficulty];
+      this.counterMines = mines;
       this.board = Array.from({ length: rows }, () =>
         Array.from({ length: cols }, () => ({
           isMine: false,
@@ -86,6 +90,12 @@ export default {
       const cell = this.board[row][col];
       if (cell.isOpen) return;
       cell.isFlag = !cell.isFlag;
+
+      if (cell.isFlag) {
+        this.counterMines--;
+      } else {
+        this.counterMines++;
+      }
     },
     restartGame() {
       this.initBoard();
