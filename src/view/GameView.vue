@@ -1,15 +1,13 @@
 <template>
-  <div>
-    <h1>Игра</h1>
-    <CustomButton @click="$router.push('/')" width="100"
-      >Вернуться к настройкам</CustomButton
-    >
-    <CustomButton @click="restartGame()" width="100"
-      >Перезапустить игру</CustomButton
-    >
-    <p>Осталось мин: {{ counterMines }}</p>
-    <p v-if="message" style="color: red">{{ message }}</p>
-
+  <div class="container">
+    <div class="sidebar-left">
+      <CustomButton @click="$router.push('/')" width="100"
+        >Вернуться к настройкам</CustomButton
+      >
+      <CustomButton @click="restartGame()" width="100"
+        >Перезапустить игру</CustomButton
+      >
+    </div>
     <div class="board">
       <div v-for="(row, rowIndex) in board" :key="rowIndex" class="row">
         <div
@@ -19,7 +17,7 @@
           @click="openCell(rowIndex, colIndex)"
           @contextmenu.prevent="flagCell(rowIndex, colIndex)"
           :style="{
-            backgroundColor: cell.isOpen ? '#444' : '#ccc',
+            backgroundColor: cell.isOpen ? '#fff' : '#ccc',
             color: colors[cell.countMines],
           }"
         >
@@ -36,6 +34,10 @@
           />
         </div>
       </div>
+    </div>
+    <div class="sidebar-right">
+      <p>Осталось мин: {{ counterMines }}</p>
+      <p v-if="message" style="color: red">{{ message }}</p>
     </div>
   </div>
 </template>
@@ -169,10 +171,24 @@ export default {
 </script>
 
 <style>
+.container {
+  display: grid;
+  grid-template-columns: 1fr 2fr 1fr;
+  align-items: flex-start;
+  margin-top: 20px;
+}
+.sidebar-left {
+  display: flex;
+  flex-direction: column;
+  margin-left: 40px;
+}
+.sidebar-right {
+  display: flex;
+  flex-direction: column;
+}
 .board {
   display: grid;
   gap: 1px;
-  margin-top: 20px;
   justify-content: center;
 }
 .row {
@@ -183,6 +199,10 @@ export default {
   width: 30px;
   height: 30px;
   border: 1px solid #999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
 }
 .mine-image {
   width: 100%;
@@ -195,5 +215,8 @@ export default {
   height: 100%;
   object-fit: cover;
   pointer-events: none;
+}
+p {
+  margin: 0;
 }
 </style>
