@@ -1,7 +1,12 @@
 <template>
   <div>
     <h1>Игра</h1>
-    <button @click="$router.push('/')">Вернуться к настройкам</button>
+    <CustomButton @click="$router.push('/')" width="100"
+      >Вернуться к настройкам</CustomButton
+    >
+    <CustomButton @click="restartGame()" width="100"
+      >Перезапустить игру</CustomButton
+    >
     <div class="board">
       <div v-for="(row, rowIndex) in board" :key="rowIndex" class="row">
         <div
@@ -31,7 +36,12 @@
 </template>
 
 <script>
+import CustomButton from "@/components/ui/CustomButton.vue";
+
 export default {
+  components: {
+    CustomButton,
+  },
   data() {
     return {
       board: [],
@@ -76,6 +86,9 @@ export default {
       const cell = this.board[row][col];
       if (cell.isOpen) return;
       cell.isFlag = !cell.isFlag;
+    },
+    restartGame() {
+      this.initBoard();
     },
   },
   created() {
