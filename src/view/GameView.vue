@@ -28,9 +28,14 @@
             class="mine-image"
           />
           <img
-            v-if="cell.isFlag && !cell.isOpen"
+            v-if="cell.isFlag === 'flag' && !cell.isOpen"
             src="@/assets/flag.png"
             class="flag-image"
+          />
+          <img
+            v-if="cell.isFlag === 'question' && !cell.isOpen"
+            src="@/assets/question.png"
+            class="question-image"
           />
         </div>
       </div>
@@ -74,7 +79,7 @@ export default {
         Array.from({ length: cols }, () => ({
           isMine: false,
           isOpen: false,
-          isFlag: false,
+          isFlag: null,
         }))
       );
       this.initMines(rows, cols, mines);
@@ -95,7 +100,7 @@ export default {
     openCell(row, col) {
       if (this.isGameover) return;
       const cell = this.board[row][col];
-      if (cell.isOpen || cell.isFlag) return;
+      if (cell.isOpen || cell.isFlag === "flag") return;
       cell.isOpen = true;
 
       if (cell.isMine) {
@@ -113,12 +118,15 @@ export default {
 
       const cell = this.board[row][col];
       if (cell.isOpen) return;
-      cell.isFlag = !cell.isFlag;
 
-      if (cell.isFlag) {
+      if (!cell.isFlag) {
+        cell.isFlag = "flag";
         this.counterMines--;
-      } else {
+      } else if (cell.isFlag === "flag") {
+        cell.isFlag = "question";
         this.counterMines++;
+      } else if (cell.isFlag === "question") {
+        cell.isFlag = null;
       }
     },
     isCellBoard(row, col) {
@@ -211,6 +219,12 @@ export default {
   pointer-events: none;
 }
 .flag-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  pointer-events: none;
+}
+.question-image {
   width: 100%;
   height: 100%;
   object-fit: cover;
