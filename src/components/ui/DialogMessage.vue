@@ -5,13 +5,20 @@
       <img v-if="isWin" src="@/assets/win.png" class="dialog-image" />
       <img v-else src="@/assets/lose.png" class="dialog-image" />
       <h2 class="dialog-title">{{ message }}</h2>
-      <button class="ok-button" @click="onClose()">Понятно</button>
+      <CustomButton variant="outlined" width="100%" @click="onClose()">
+        Понятно
+      </CustomButton>
     </div>
   </div>
 </template>
 
 <script>
+import CustomButton from "@/components/ui/CustomButton.vue";
+
 export default {
+  components: {
+    CustomButton,
+  },
   props: {
     visible: {
       type: Boolean,
@@ -83,23 +90,5 @@ export default {
 
 .close-button:hover {
   color: #212529;
-}
-
-.ok-button {
-  background-color: #161616;
-  color: white;
-  border: 2px solid #161616;
-  border-radius: 4px;
-  margin: 10px;
-  padding: 8px 16px;
-  font-size: 14px;
-  font-weight: bold;
-  cursor: pointer;
-  transition: background-color 0.3s ease, color 0.3s ease;
-}
-
-.ok-button:hover {
-  background-color: white;
-  color: #161616;
 }
 </style>

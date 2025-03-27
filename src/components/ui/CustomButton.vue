@@ -1,7 +1,8 @@
 <template>
   <button
     class="custom-button"
-    :style="{ backgroundColor: color, width: width }"
+    :class="variant"
+    :style="{ width: width }"
     @click="$emit('click')"
   >
     <slot />
@@ -11,13 +12,13 @@
 <script>
 export default {
   props: {
-    color: {
-      type: String,
-      default: "#161616",
-    },
     width: {
       type: String,
       default: "100%",
+    },
+    variant: {
+      type: String,
+      default: "contained",
     },
   },
 };
@@ -27,19 +28,32 @@ export default {
 .custom-button {
   margin: 5px;
   padding: 10px 20px;
-  font-size: 16px;
+  font-size: 14px;
   font-weight: bold;
-  color: #fff;
   border: none;
   border-radius: 8px;
   cursor: pointer;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
-
-.custom-button:hover {
+.custom-button.contained {
+  background-color: #161616;
+  color: white;
+  border: none;
+}
+.custom-button.contained:hover {
   transform: scale(1.05);
 }
-
-.custom-button:active {
+.custom-button.contained:active {
   transform: scale(0.95);
+}
+
+.custom-button.outlined {
+  background-color: transparent;
+  color: #161616;
+  border: 2px solid #161616;
+}
+.custom-button.outlined:hover {
+  background-color: #161616;
+  color: white;
 }
 </style>
