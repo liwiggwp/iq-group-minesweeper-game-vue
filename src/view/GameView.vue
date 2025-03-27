@@ -10,6 +10,7 @@
     </template>
 
     <template #default>
+      <GameTimer :seconds="timer" />
       <div class="board">
         <div v-for="(row, rowIndex) in board" :key="rowIndex" class="row">
           <div
@@ -52,8 +53,7 @@
     </template>
 
     <template #sidebar-right>
-      <GameTimer :seconds="timer" />
-      <p>Осталось мин: {{ counterMines }}</p>
+      <GameMineCounter :counterMines="counterMines" />
     </template>
   </LayoutContainer>
 </template>
@@ -64,6 +64,7 @@ import colors from "@/utils/numberColors";
 import DialogMessage from "@/components/ui/DialogMessage.vue";
 import LayoutContainer from "@/components/layout/LayoutContainer.vue";
 import GameTimer from "@/components/GameTimer.vue";
+import GameMineCounter from "@/components/GameMineCounter.vue";
 
 export default {
   components: {
@@ -71,6 +72,7 @@ export default {
     DialogMessage,
     LayoutContainer,
     GameTimer,
+    GameMineCounter,
   },
   data() {
     return {
@@ -245,6 +247,7 @@ export default {
   display: grid;
   gap: 1px;
   justify-content: center;
+  margin-top: 20px;
 }
 .row {
   display: flex;
