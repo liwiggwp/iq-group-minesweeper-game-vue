@@ -112,6 +112,7 @@ export default {
       if (cell.countMines === 0) {
         this.openNeighbourCells(row, col);
       }
+      this.isWin();
     },
     flagCell(row, col) {
       if (this.isGameOver) return;
@@ -128,6 +129,7 @@ export default {
       } else if (cell.isFlag === "question") {
         cell.isFlag = null;
       }
+      this.isWin();
     },
     isCellBoard(row, col) {
       return (
@@ -166,6 +168,26 @@ export default {
             }
           }
         }
+      }
+    },
+    isWin() {
+      let allFlagMines = true;
+      let allOpenCell = true;
+
+      for (let row of this.board) {
+        for (let cell of row) {
+          if (cell.isMine && cell.isFlag !== "flag") {
+            allFlagMines = false;
+          }
+          if (!cell.isMine && !cell.isOpen) {
+            allOpenCell = false;
+          }
+        }
+      }
+
+      if ((allFlagMines && this.counterMines === 0) || allOpenCell) {
+        this.message = "Поздравляем! Вы победили!";
+        this.isGameover = true;
       }
     },
     restartGame() {
