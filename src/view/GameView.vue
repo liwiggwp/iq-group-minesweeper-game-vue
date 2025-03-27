@@ -1,68 +1,74 @@
 <template>
-  <div class="container">
-    <div class="sidebar-left">
-      <CustomButton @click="$router.push('/')" width="100"
-        >Вернуться к настройкам</CustomButton
-      >
-      <CustomButton @click="restartGame()" width="100"
-        >Перезапустить игру</CustomButton
-      >
-    </div>
-    <div class="board">
-      <div v-for="(row, rowIndex) in board" :key="rowIndex" class="row">
-        <div
-          v-for="(cell, colIndex) in row"
-          :key="colIndex"
-          class="cell"
-          @click="openCell(rowIndex, colIndex)"
-          @contextmenu.prevent="flagCell(rowIndex, colIndex)"
-          :style="{
-            backgroundColor: cell.isOpen ? '#fff' : '#ccc',
-            color: colors[cell.countMines],
-          }"
-        >
-          {{ cell.isOpen && cell.countMines > 0 ? cell.countMines : "" }}
-          <img
-            v-if="cell.isMine && cell.isOpen"
-            src="@/assets/mine.png"
-            class="mine-image"
-          />
-          <img
-            v-if="cell.isFlag === 'flag' && !cell.isOpen"
-            src="@/assets/flag.png"
-            class="flag-image"
-          />
-          <img
-            v-if="cell.isFlag === 'question' && !cell.isOpen"
-            src="@/assets/question.png"
-            class="question-image"
-          />
+  <LayoutContainer>
+    <template #sidebar-left>
+      <CustomButton @click="$router.push('/')" width="100">
+        Вернуться к настройкам
+      </CustomButton>
+      <CustomButton @click="restartGame()" width="100">
+        Перезапустить игру
+      </CustomButton>
+    </template>
+
+    <template #default>
+      <div class="board">
+        <div v-for="(row, rowIndex) in board" :key="rowIndex" class="row">
+          <div
+            v-for="(cell, colIndex) in row"
+            :key="colIndex"
+            class="cell"
+            @click="openCell(rowIndex, colIndex)"
+            @contextmenu.prevent="flagCell(rowIndex, colIndex)"
+            :style="{
+              backgroundColor: cell.isOpen ? '#fff' : '#ccc',
+              color: colors[cell.countMines],
+            }"
+          >
+            {{ cell.isOpen && cell.countMines > 0 ? cell.countMines : "" }}
+            <img
+              v-if="cell.isMine && cell.isOpen"
+              src="@/assets/mine.png"
+              class="mine-image"
+            />
+            <img
+              v-if="cell.isFlag === 'flag' && !cell.isOpen"
+              src="@/assets/flag.png"
+              class="flag-image"
+            />
+            <img
+              v-if="cell.isFlag === 'question' && !cell.isOpen"
+              src="@/assets/question.png"
+              class="question-image"
+            />
+          </div>
         </div>
       </div>
-    </div>
-    <div class="sidebar-right">
+      <DialogMessage
+        :visible="dialogVisible"
+        :message="dialogMessage"
+        @close="dialogVisible = false"
+        :isWin="isWin"
+        :timer="timer"
+      />
+    </template>
+
+    <template #sidebar-right>
       <p>Время: {{ timer }} сек.</p>
       <p>Осталось мин: {{ counterMines }}</p>
-    </div>
-    <DialogMessage
-      :visible="dialogVisible"
-      :message="dialogMessage"
-      @close="dialogVisible = false"
-      :isWin="isWin"
-      :timer="timer"
-    />
-  </div>
+    </template>
+  </LayoutContainer>
 </template>
 
 <script>
 import CustomButton from "@/components/ui/CustomButton.vue";
 import colors from "@/utils/numberColors";
 import DialogMessage from "@/components/ui/DialogMessage.vue";
+import LayoutContainer from "@/components/layout/LayoutContainer.vue";
 
 export default {
   components: {
     CustomButton,
     DialogMessage,
+    LayoutContainer,
   },
   data() {
     return {
@@ -233,21 +239,6 @@ export default {
 </script>
 
 <style>
-.container {
-  display: grid;
-  grid-template-columns: 1fr 2fr 1fr;
-  align-items: flex-start;
-  margin-top: 20px;
-}
-.sidebar-left {
-  display: flex;
-  flex-direction: column;
-  margin-left: 40px;
-}
-.sidebar-right {
-  display: flex;
-  flex-direction: column;
-}
 .board {
   display: grid;
   gap: 1px;

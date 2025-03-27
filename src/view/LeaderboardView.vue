@@ -1,34 +1,41 @@
 <template>
-  <div class="leaderboard">
-    <h1>Таблица рекордов</h1>
-    <table>
-      <thead>
-        <tr>
-          <th></th>
-          <th>Игрок</th>
-          <th>Время</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="(leader, index) in leaders" :key="index">
-          <td style="font-weight: bold">{{ index + 1 }}</td>
-          <td>{{ leader.player }}</td>
-          <td>{{ leader.time }}</td>
-        </tr>
-      </tbody>
-    </table>
-    <CustomButton @click="$router.push('/')" width="100"
-      >Вернуться к настройкам</CustomButton
-    >
-  </div>
+  <LayoutContainer>
+    <template #sidebar-left>
+      <CustomButton @click="$router.push('/')" width="100">
+        Вернуться к настройкам
+      </CustomButton>
+    </template>
+
+    <template #default>
+      <h1>Таблица рекордов</h1>
+      <table>
+        <thead>
+          <tr>
+            <th></th>
+            <th>Игрок</th>
+            <th>Время</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="(leader, index) in leaders" :key="index">
+            <td style="font-weight: bold">{{ index + 1 }}</td>
+            <td>{{ leader.player }}</td>
+            <td>{{ leader.time }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </template>
+  </LayoutContainer>
 </template>
 
 <script>
 import CustomButton from "@/components/ui/CustomButton.vue";
+import LayoutContainer from "@/components/layout/LayoutContainer.vue";
 
 export default {
   components: {
     CustomButton,
+    LayoutContainer,
   },
   data() {
     return {
