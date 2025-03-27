@@ -42,25 +42,35 @@
     </div>
     <div class="sidebar-right">
       <p>Осталось мин: {{ counterMines }}</p>
-      <p v-if="message" style="color: red">{{ message }}</p>
     </div>
+    <DialogMessage
+      :visible="dialogVisible"
+      :message="dialogMessage"
+      @close="dialogVisible = false"
+      :isWin="isWin"
+    />
   </div>
 </template>
 
 <script>
 import CustomButton from "@/components/ui/CustomButton.vue";
 import colors from "@/utils/numberColors";
+import DialogMessage from "@/components/ui/DialogMessage.vue";
+
 export default {
   components: {
     CustomButton,
+    DialogMessage,
   },
   data() {
     return {
       board: [],
       counterMines: 0,
       isGameover: false,
-      message: "",
       colors,
+      dialogVisible: false,
+      dialogMessage: "",
+      isWin: false,
       difficultySettings: {
         easy: { rows: 8, cols: 8, mines: 10 },
         medium: { rows: 16, cols: 16, mines: 40 },
@@ -74,7 +84,6 @@ export default {
       const { rows, cols, mines } = this.difficultySettings[difficulty];
       this.counterMines = mines;
       this.isGameover = false;
-      this.message = "";
       this.board = Array.from({ length: rows }, () =>
         Array.from({ length: cols }, () => ({
           isMine: false,
@@ -104,15 +113,17 @@ export default {
       cell.isOpen = true;
 
       if (cell.isMine) {
-        this.message = "Вы проиграли!";
         this.isGameover = true;
+        this.dialogMessage = "Вы проиграли!";
+        this.isWin = false;
+        this.dialogVisible = true;
         return;
       }
 
       if (cell.countMines === 0) {
         this.openNeighbourCells(row, col);
       }
-      this.isWin();
+      this.isWinGame();
     },
     flagCell(row, col) {
       if (this.isGameOver) return;
@@ -129,7 +140,7 @@ export default {
       } else if (cell.isFlag === "question") {
         cell.isFlag = null;
       }
-      this.isWin();
+      this.isWinGame();
     },
     isCellBoard(row, col) {
       return (
@@ -170,7 +181,7 @@ export default {
         }
       }
     },
-    isWin() {
+    isWinGame() {
       let allFlagMines = true;
       let allOpenCell = true;
 
@@ -186,8 +197,10 @@ export default {
       }
 
       if ((allFlagMines && this.counterMines === 0) || allOpenCell) {
-        this.message = "Поздравляем! Вы победили!";
         this.isGameover = true;
+        this.dialogMessage = "Поздравляем! Вы победили!";
+        this.isWin = true;
+        this.dialogVisible = true;
       }
     },
     restartGame() {
