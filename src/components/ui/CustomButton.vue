@@ -3,7 +3,6 @@
     class="custom-button"
     :class="variant"
     :style="{ width: width }"
-    @click="$emit('click')"
   >
     <slot />
   </button>

@@ -49,6 +49,7 @@
       :message="dialogMessage"
       @close="dialogVisible = false"
       :isWin="isWin"
+      :timer="timer"
     />
   </div>
 </template>
