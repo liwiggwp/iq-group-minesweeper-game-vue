@@ -52,7 +52,7 @@
     </template>
 
     <template #sidebar-right>
-      <p>Время: {{ timer }} сек.</p>
+      <GameTimer :seconds="timer" />
       <p>Осталось мин: {{ counterMines }}</p>
     </template>
   </LayoutContainer>
@@ -63,12 +63,14 @@ import CustomButton from "@/components/ui/CustomButton.vue";
 import colors from "@/utils/numberColors";
 import DialogMessage from "@/components/ui/DialogMessage.vue";
 import LayoutContainer from "@/components/layout/LayoutContainer.vue";
+import GameTimer from "@/components/GameTimer.vue";
 
 export default {
   components: {
     CustomButton,
     DialogMessage,
     LayoutContainer,
+    GameTimer,
   },
   data() {
     return {
