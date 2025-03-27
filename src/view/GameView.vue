@@ -41,6 +41,7 @@
       </div>
     </div>
     <div class="sidebar-right">
+      <p>Время: {{ timer }} сек.</p>
       <p>Осталось мин: {{ counterMines }}</p>
     </div>
     <DialogMessage
@@ -71,6 +72,8 @@ export default {
       dialogVisible: false,
       dialogMessage: "",
       isWin: false,
+      timer: 0,
+      timerInterval: null,
       difficultySettings: {
         easy: { rows: 8, cols: 8, mines: 10 },
         medium: { rows: 16, cols: 16, mines: 40 },
@@ -117,6 +120,7 @@ export default {
         this.dialogMessage = "Вы проиграли!";
         this.isWin = false;
         this.dialogVisible = true;
+        this.stopTimer();
         return;
       }
 
@@ -201,14 +205,28 @@ export default {
         this.dialogMessage = "Поздравляем! Вы победили!";
         this.isWin = true;
         this.dialogVisible = true;
+        this.stopTimer();
       }
+    },
+    startTimer() {
+      this.timer = 0;
+      this.timerInterval = setInterval(() => {
+        this.timer++;
+      }, 1000);
+    },
+    stopTimer() {
+      clearInterval(this.timerInterval);
+      this.timerInterval = null;
     },
     restartGame() {
       this.initBoard();
+      this.stopTimer();
+      this.startTimer();
     },
   },
   created() {
     this.initBoard();
+    this.startTimer();
   },
 };
 </script>
