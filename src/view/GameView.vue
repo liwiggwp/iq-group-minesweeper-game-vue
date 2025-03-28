@@ -8,9 +8,9 @@
         Перезапустить игру
       </CustomButton>
     </template>
-    
+
     <template #default>
-      <GameTimer :seconds="timer" />
+      <GameTimer ref="gameTimer" :initStart="true" @update:time="updateTimer" />
     </template>
 
     <template #sidebar-right>
@@ -87,7 +87,6 @@ export default {
       dialogMessage: "",
       isWin: false,
       timer: 0,
-      timerInterval: null,
       difficultySettings: {
         easy: { rows: 8, cols: 8, mines: 10 },
         medium: { rows: 16, cols: 16, mines: 40 },
@@ -151,7 +150,7 @@ export default {
         this.dialogMessage = "Вы проиграли!";
         this.isWin = false;
         this.dialogVisible = true;
-        this.stopTimer();
+        this.$refs.gameTimer.stopTimer();
         return;
       }
 
@@ -236,28 +235,20 @@ export default {
         this.dialogMessage = "Поздравляем! Вы победили!";
         this.isWin = true;
         this.dialogVisible = true;
-        this.stopTimer();
+        this.$refs.gameTimer.stopTimer();
       }
     },
-    startTimer() {
-      this.timer = 0;
-      this.timerInterval = setInterval(() => {
-        this.timer++;
-      }, 1000);
+    updateTimer(seconds) {
+      this.timer = seconds;
     },
-    stopTimer() {
-      clearInterval(this.timerInterval);
-      this.timerInterval = null;
-    },
+
     restartGame() {
       this.initBoard();
-      this.stopTimer();
-      this.startTimer();
+      this.$refs.gameTimer.resetTimer();
     },
   },
   created() {
     this.initBoard();
-    this.startTimer();
   },
 };
 </script>
