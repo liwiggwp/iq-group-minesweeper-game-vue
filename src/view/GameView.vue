@@ -96,6 +96,16 @@ export default {
     };
   },
   methods: {
+    createEmptyBoard(rows, cols) {
+      return Array.from({ length: rows }, () =>
+        Array.from({ length: cols }, () => ({
+          isMine: false,
+          isOpen: false,
+          isFlag: null,
+          countMines: 0,
+        }))
+      );
+    },
     initBoard() {
       const rows = parseInt(this.$route.query.rows) || null;
       const cols = parseInt(this.$route.query.cols) || null;
@@ -103,27 +113,13 @@ export default {
 
       if (rows && cols && mines) {
         this.counterMines = mines;
-        this.board = Array.from({ length: rows }, () =>
-          Array.from({ length: cols }, () => ({
-            isMine: false,
-            isOpen: false,
-            isFlag: null,
-            countMines: 0,
-          }))
-        );
+        this.board = this.createEmptyBoard(rows, cols);
       } else {
         const difficulty = this.$route.query.difficulty || "easy";
         const { rows, cols, mines } = this.difficultySettings[difficulty];
         this.counterMines = mines;
         this.isGameover = false;
-        this.board = Array.from({ length: rows }, () =>
-          Array.from({ length: cols }, () => ({
-            isMine: false,
-            isOpen: false,
-            isFlag: null,
-            countMines: 0,
-          }))
-        );
+        this.board = this.createEmptyBoard(rows, cols);
       }
       this.firstClick = false;
     },
@@ -159,11 +155,7 @@ export default {
       cell.isOpen = true;
 
       if (cell.isMine) {
-        this.isGameover = true;
-        this.dialogMessage = "Вы проиграли!";
-        this.isWin = false;
-        this.dialogVisible = true;
-        this.$refs.gameTimer.stopTimer();
+        this.stopGame(false, "Вы проиграли!");
         return;
       }
 
@@ -244,17 +236,19 @@ export default {
       }
 
       if ((allFlagMines && this.counterMines === 0) || allOpenCell) {
-        this.isGameover = true;
-        this.dialogMessage = "Поздравляем! Вы победили!";
-        this.isWin = true;
-        this.dialogVisible = true;
-        this.$refs.gameTimer.stopTimer();
+        this.stopGame(true, "Поздравляем! Вы победили!");
       }
+    },
+    stopGame(isWin, message) {
+      this.isGameover = true;
+      this.dialogMessage = message;
+      this.isWin = isWin;
+      this.dialogVisible = true;
+      this.$refs.gameTimer.stopTimer();
     },
     updateTimer(seconds) {
       this.timer = seconds;
     },
-
     restartGame() {
       this.initBoard();
       this.$refs.gameTimer.resetTimer();
