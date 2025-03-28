@@ -1,16 +1,23 @@
 <template>
   <LayoutContainer>
     <template #sidebar-left>
-      <CustomButton @click="$router.push('/')" width="100">
+      <CustomButton @click="$router.push('/')" width="60%">
         Вернуться к настройкам
       </CustomButton>
-      <CustomButton @click="restartGame()" width="100">
+      <CustomButton @click="restartGame()" width="60%">
         Перезапустить игру
       </CustomButton>
     </template>
-
+    
     <template #default>
       <GameTimer :seconds="timer" />
+    </template>
+
+    <template #sidebar-right>
+      <GameMineCounter :counterMines="counterMines" />
+    </template>
+
+    <template #board>
       <div class="board">
         <div v-for="(row, rowIndex) in board" :key="rowIndex" class="row">
           <div
@@ -50,10 +57,6 @@
         :isWin="isWin"
         :timer="timer"
       />
-    </template>
-
-    <template #sidebar-right>
-      <GameMineCounter :counterMines="counterMines" />
     </template>
   </LayoutContainer>
 </template>
