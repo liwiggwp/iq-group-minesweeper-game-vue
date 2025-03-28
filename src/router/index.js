@@ -3,6 +3,7 @@ import SettingsView from "@/view/SettingsView.vue";
 import GameView from "@/view/GameView.vue";
 import LeaderboardView from "@/view/LeaderboardView.vue";
 import MainLayout from "@/components/layout/MainLayout.vue";
+import Error404View from "@/view/Error404View.vue"; 
 
 const routes = [
   {
@@ -13,6 +14,10 @@ const routes = [
       { path: "/game", component: GameView },
       { path: "/leaderboard", component: LeaderboardView },
     ],
+  },
+  {
+    path: "/:pathMatch(.*)*", 
+    component: Error404View,
   },
 ];
 
