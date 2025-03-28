@@ -165,7 +165,7 @@ export default {
       this.isWinGame();
     },
     flagCell(row, col) {
-      if (this.isGameOver) return;
+      if (!this.firstClick || this.isGameover) return;
 
       const cell = this.board[row][col];
       if (cell.isOpen) return;
@@ -174,6 +174,8 @@ export default {
         if (this.counterMines > 0) {
           cell.isFlag = "flag";
           this.counterMines--;
+        } else {
+          cell.isFlag = "question";
         }
       } else if (cell.isFlag === "flag") {
         cell.isFlag = "question";
