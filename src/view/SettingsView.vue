@@ -14,9 +14,9 @@
             <td>{{ leader.player }}</td>
             <td>{{ formatTime(leader.time) }}</td>
           </tr>
-          <h3>Топ 3 лидера</h3>
         </tbody>
       </table>
+      <h3>Топ 3 лидера</h3>
     </template>
 
     <template #default>
