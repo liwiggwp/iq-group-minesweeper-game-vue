@@ -46,11 +46,38 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  margin-left: 40px;
   max-width: 400px;
 }
 .board-container {
   display: flex;
   justify-content: center;
   margin-top: 20px;
+}
+
+@media (max-width: 768px) {
+  .top-row {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
+  .sidebar-left {
+    order: 1;
+    width: 100%;
+    text-align: center;
+  }
+  .content {
+    order: 2;
+    width: 100%;
+    text-align: center;
+  }
+  .sidebar-right {
+    order: 3;
+    width: 100%;
+    text-align: center;
+  }
+  .board-container {
+    margin-top: 10px;
+  }
 }
 </style>

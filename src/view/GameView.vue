@@ -263,9 +263,9 @@ export default {
 
 <style scoped>
 .board {
-  display: grid;
+  display: inline-grid;
   gap: 1px;
-  justify-content: center;
+  overflow-x: auto;
 }
 .row {
   display: flex;
@@ -298,7 +298,39 @@ export default {
   object-fit: cover;
   pointer-events: none;
 }
-p {
-  margin: 0;
+
+@media (max-width: 768px) {
+  .board {
+    transform: scale(0.95);
+  }
+}
+@media (max-width: 600px) {
+  .board {
+    transform: scale(0.85);
+  }
+}
+
+@media (max-width: 500px) {
+  .board {
+    transform: scale(0.75);
+  }
+}
+
+@media (max-width: 400px) {
+  .board {
+    transform: scale(0.65);
+  }
+}
+
+@media (max-width: 350px) {
+  .board {
+    transform: scale(0.55);
+  }
+}
+
+@media (max-width: 320px) {
+  .board {
+    transform: scale(0.5);
+  }
 }
 </style>
