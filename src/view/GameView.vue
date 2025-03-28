@@ -66,8 +66,8 @@ import CustomButton from "@/components/ui/CustomButton.vue";
 import colors from "@/utils/numberColors";
 import DialogMessage from "@/components/ui/DialogMessage.vue";
 import LayoutContainer from "@/components/layout/LayoutContainer.vue";
-import GameTimer from "@/components/GameTimer.vue";
-import GameMineCounter from "@/components/GameMineCounter.vue";
+import GameTimer from "@/components/game/GameTimer.vue";
+import GameMineCounter from "@/components/game/GameMineCounter.vue";
 
 export default {
   components: {
