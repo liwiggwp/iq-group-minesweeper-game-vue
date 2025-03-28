@@ -171,8 +171,10 @@ export default {
       if (cell.isOpen) return;
 
       if (!cell.isFlag) {
-        cell.isFlag = "flag";
-        this.counterMines--;
+        if (this.counterMines > 0) {
+          cell.isFlag = "flag";
+          this.counterMines--;
+        }
       } else if (cell.isFlag === "flag") {
         cell.isFlag = "question";
         this.counterMines++;
@@ -226,7 +228,7 @@ export default {
 
       for (let row of this.board) {
         for (let cell of row) {
-          if (cell.isMine && cell.isFlag !== "flag") {
+          if (cell.isFlag !== "flag") {
             allFlagMines = false;
           }
           if (!cell.isMine && !cell.isOpen) {
