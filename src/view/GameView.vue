@@ -97,18 +97,35 @@ export default {
   },
   methods: {
     initBoard() {
-      const difficulty = this.$route.query.difficulty || "easy";
-      const { rows, cols, mines } = this.difficultySettings[difficulty];
-      this.counterMines = mines;
-      this.isGameover = false;
-      this.board = Array.from({ length: rows }, () =>
-        Array.from({ length: cols }, () => ({
-          isMine: false,
-          isOpen: false,
-          isFlag: null,
-        }))
-      );
-      this.initMines(rows, cols, mines);
+      const rows = parseInt(this.$route.query.rows) || null;
+      const cols = parseInt(this.$route.query.cols) || null;
+      const mines = parseInt(this.$route.query.mines) || null;
+
+      if (rows && cols && mines) {
+        this.counterMines = mines;
+        this.board = Array.from({ length: rows }, () =>
+          Array.from({ length: cols }, () => ({
+            isMine: false,
+            isOpen: false,
+            isFlag: null,
+          }))
+        );
+        this.initMines(rows, cols, mines);
+      } else {
+        const difficulty = this.$route.query.difficulty || "easy";
+        const { rows, cols, mines } = this.difficultySettings[difficulty];
+        this.counterMines = mines;
+        this.isGameover = false;
+        this.board = Array.from({ length: rows }, () =>
+          Array.from({ length: cols }, () => ({
+            isMine: false,
+            isOpen: false,
+            isFlag: null,
+          }))
+        );
+        this.initMines(rows, cols, mines);
+      }
+
       this.countNeighbourMines();
     },
     initMines(rows, cols, mines) {

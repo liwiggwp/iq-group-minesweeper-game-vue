@@ -1,53 +1,150 @@
 <template>
-  <div>
-    <div>
-      <div class="settings-container">
-        <h1>Выбор уровня сложности</h1>
-        <div class="difficulty">
-          <CustomButton @click="startGame('easy')" width="100%"
-            >Простой (8x8, 10 мин)</CustomButton
-          >
-          <CustomButton @click="startGame('medium')" width="100%"
-            >Средний (16x16, 40 мин)</CustomButton
-          >
-          <CustomButton @click="startGame('hard')" width="100%"
-            >Сложный (32x16, 100 мин)</CustomButton
-          >
-        </div>
+  <LayoutContainer>
+    <template #sidebar-left> </template>
+
+    <template #default>
+      <h1>Выбор уровня сложности</h1>
+      <div class="difficulty">
+        <CustomButton @click="startGame('easy')" width="100%">
+          Простой (8x8, 10 мин)
+        </CustomButton>
+        <CustomButton @click="startGame('medium')" width="100%">
+          Средний (16x16, 40 мин)
+        </CustomButton>
+        <CustomButton @click="startGame('hard')" width="100%">
+          Сложный (32x16, 100 мин)
+        </CustomButton>
       </div>
-    </div>
-  </div>
+      <DialogMessage
+        :visible="dialogVisible"
+        :message="dialogMessage"
+        :isWin="false"
+        :timer="0"
+        @close="dialogVisible = false"
+      />
+    </template>
+    <template #sidebar-right>
+      <h2>Кастомный режим</h2>
+      <form @submit.prevent="startCustomGame" class="custom-mode">
+        <div class="input-group">
+          <p>Строки</p>
+          <input
+            id="rows"
+            type="number"
+            v-model.number="customRows"
+            min="5"
+            max="50"
+            required
+          />
+        </div>
+        <div class="input-group">
+          <p>Столбцы</p>
+          <input
+            id="cols"
+            type="number"
+            v-model.number="customCols"
+            min="5"
+            max="50"
+            required
+          />
+        </div>
+        <div class="input-group">
+          <p>Мины</p>
+          <input
+            id="mines"
+            type="number"
+            v-model.number="customMines"
+            min="1"
+            required
+          />
+        </div>
+        <CustomButton type="submit" width="50%">Начать игру</CustomButton>
+      </form>
+    </template>
+  </LayoutContainer>
 </template>
 
 <script>
 import CustomButton from "@/components/ui/CustomButton.vue";
+import LayoutContainer from "@/components/layout/LayoutContainer.vue";
+import DialogMessage from "@/components/ui/DialogMessage.vue";
 
 export default {
   components: {
     CustomButton,
+    LayoutContainer,
+    DialogMessage,
+  },
+  data() {
+    return {
+      customRows: 10,
+      customCols: 10,
+      customMines: 10,
+      dialogVisible: false,
+      dialogMessage: "",
+    };
   },
   methods: {
     startGame(difficulty) {
       this.$router.push({ path: "/game", query: { difficulty } });
+    },
+    startCustomGame() {
+      if (this.customMines >= this.customRows * this.customCols) {
+        this.dialogMessage =
+          "Количество мин должно быть меньше, чем количество ячеек!";
+        this.dialogVisible = true;
+        return;
+      }
+      this.$router.push({
+        path: "/game",
+        query: {
+          rows: this.customRows,
+          cols: this.customCols,
+          mines: this.customMines,
+        },
+      });
     },
   },
 };
 </script>
 
 <style>
-.settings-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-}
-
 .difficulty {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
+  align-items: flex-start;
+  justify-content: flex-start;
   gap: 10px;
+}
+.custom-mode {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+  width: 100%;
+}
+.input-group {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 100%;
+  max-width: 200px;
+}
+input {
+  width: 100%;
+  padding: 8px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  margin-top: 5px;
+}
+h2 {
+  align-self: flex-start;
+  margin-top: 0;
+}
+p {
+  align-self: flex-start;
+  font-size: 14px;
+  margin-bottom: 5px;
 }
 </style>
