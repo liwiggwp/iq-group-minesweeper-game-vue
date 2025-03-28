@@ -1,6 +1,23 @@
 <template>
   <LayoutContainer>
-    <template #sidebar-left> </template>
+    <template #sidebar-left>
+      <img src="@/assets/main.png" class="main-image" />
+      <table>
+        <thead>
+          <tr>
+            <th>Игрок</th>
+            <th>Время</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="(leader, index) in leaders" :key="index">
+            <td>{{ leader.player }}</td>
+            <td>{{ formatTime(leader.time) }}</td>
+          </tr>
+          <h3>Топ 3 лидера</h3>
+        </tbody>
+      </table>
+    </template>
 
     <template #default>
       <h1>Выбор уровня сложности</h1>
@@ -23,6 +40,7 @@
         @close="dialogVisible = false"
       />
     </template>
+
     <template #sidebar-right>
       <h2>Кастомный режим</h2>
       <form @submit.prevent="startCustomGame" class="custom-mode">
@@ -68,6 +86,7 @@
 import CustomButton from "@/components/ui/CustomButton.vue";
 import LayoutContainer from "@/components/layout/LayoutContainer.vue";
 import DialogMessage from "@/components/ui/DialogMessage.vue";
+import { formatTime } from "@/utils/timeFormatter.js";
 
 export default {
   components: {
@@ -82,7 +101,11 @@ export default {
       customMines: 10,
       dialogVisible: false,
       dialogMessage: "",
+      leaders: [],
     };
+  },
+  mounted() {
+    this.leaders = this.$store.getters.TOPLEADERS.slice(0, 3);
   },
   methods: {
     startGame(difficulty) {
@@ -104,29 +127,24 @@ export default {
         },
       });
     },
+    formatTime,
   },
 };
 </script>
 
-<style>
+<style scoped>
 .difficulty {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
-  justify-content: flex-start;
-  gap: 10px;
 }
 .custom-mode {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
-  gap: 10px;
   width: 100%;
 }
 .input-group {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
   width: 100%;
   max-width: 200px;
 }
@@ -136,7 +154,6 @@ input {
   font-size: 16px;
   border: 1px solid #ccc;
   border-radius: 5px;
-  margin-top: 5px;
 }
 h2 {
   align-self: flex-start;
@@ -146,5 +163,25 @@ p {
   align-self: flex-start;
   font-size: 14px;
   margin-bottom: 5px;
+}
+.main-image {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+  margin: 0;
+  padding: 0;
+}
+
+table {
+  width: 80%;
+  border-collapse: collapse;
+  font-size: 14px;
+  text-align: center;
+}
+
+th,
+td {
+  border: 1px solid #999;
+  padding: 5px;
 }
 </style>

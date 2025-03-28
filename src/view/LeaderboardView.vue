@@ -48,7 +48,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .leaderboard {
   max-width: 400px;
   margin: auto;

@@ -21,7 +21,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .mine-counter {
   display: flex;
   align-items: center;
@@ -32,7 +32,6 @@ export default {
   font-weight: bold;
   border-radius: 10px;
   padding: 10px 20px;
-  margin-right: 20px;
 }
 .mine-icon-container {
   display: flex;
@@ -49,6 +48,8 @@ export default {
   flex-direction: column;
   align-items: center;
   font-size: 20px;
-  margin-bottom: 5px;
+}
+p{
+  margin: 0;
 }
 </style>

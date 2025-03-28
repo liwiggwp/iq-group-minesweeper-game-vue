@@ -18,7 +18,7 @@
   </div>
 </template>
 
-<style>
+<style scoped>
 .container {
   display: flex;
   flex-direction: column;
@@ -27,11 +27,14 @@
 .top-row {
   display: grid;
   grid-template-columns: 1fr 2fr 1fr;
+  align-items: start;
 }
 .sidebar-left {
   display: flex;
   flex-direction: column;
   align-items: center;
+  margin-left: 40px;
+  max-width: 400px;
 }
 .content {
   display: flex;
@@ -43,9 +46,11 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  max-width: 400px;
 }
 .board-container {
   display: flex;
   justify-content: center;
+  margin-top: 20px;
 }
 </style>

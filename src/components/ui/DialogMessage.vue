@@ -65,7 +65,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .dialog-container {
   position: fixed;
   top: 0;

@@ -262,12 +262,11 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .board {
   display: grid;
   gap: 1px;
   justify-content: center;
-  margin-top: 20px;
 }
 .row {
   display: flex;
