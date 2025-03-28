@@ -87,6 +87,7 @@ export default {
       dialogMessage: "",
       isWin: false,
       timer: 0,
+      firstClick: false,
       difficultySettings: {
         easy: { rows: 8, cols: 8, mines: 10 },
         medium: { rows: 16, cols: 16, mines: 40 },
@@ -107,9 +108,9 @@ export default {
             isMine: false,
             isOpen: false,
             isFlag: null,
+            countMines: 0,
           }))
         );
-        this.initMines(rows, cols, mines);
       } else {
         const difficulty = this.$route.query.difficulty || "easy";
         const { rows, cols, mines } = this.difficultySettings[difficulty];
@@ -120,29 +121,41 @@ export default {
             isMine: false,
             isOpen: false,
             isFlag: null,
+            countMines: 0,
           }))
         );
-        this.initMines(rows, cols, mines);
       }
-
-      this.countNeighbourMines();
+      this.firstClick = false;
     },
-    initMines(rows, cols, mines) {
+    initMines(mines, firstRow, firstCol) {
       let minesPlaced = 0;
 
       while (minesPlaced < mines) {
-        const row = Math.floor(Math.random() * rows);
-        const col = Math.floor(Math.random() * cols);
-        if (!this.board[row][col].isMine) {
+        const row = Math.floor(Math.random() * this.board.length);
+        const col = Math.floor(Math.random() * this.board[0].length);
+        if (
+          !this.board[row][col].isMine &&
+          (row !== firstRow || col !== firstCol)
+        ) {
           this.board[row][col].isMine = true;
           minesPlaced++;
         }
       }
     },
     openCell(row, col) {
-      if (this.isGameover) return;
+      if (
+        this.isGameover ||
+        this.board[row][col].isOpen ||
+        this.board[row][col].isFlag === "flag"
+      )
+        return;
+      if (!this.firstClick) {
+        this.initMines(this.counterMines, row, col);
+        this.countNeighbourMines();
+        this.firstClick = true;
+      }
+
       const cell = this.board[row][col];
-      if (cell.isOpen || cell.isFlag === "flag") return;
       cell.isOpen = true;
 
       if (cell.isMine) {
@@ -245,6 +258,7 @@ export default {
     restartGame() {
       this.initBoard();
       this.$refs.gameTimer.resetTimer();
+      this.$refs.gameTimer.startTimer();
     },
   },
   created() {
